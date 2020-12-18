@@ -1,20 +1,27 @@
-import React from 'react';
-import InputExampleFocus from './components/ui-shared/Input';
+import React, { useState } from 'react';
 import { Container } from 'semantic-ui-react';
-import InputForm from './components/ui-shared/InputForm';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import WelcomePage from './components/pages/WelcomePage';
+import HomePage from './components/pages/HomePage';
+import SocketContextProvider from './contexts/SocketContext';
+// import socket from './connection/socket';
 
 function App() {
-  const handleSubmit = (e, value) => {
-    e.preventDefault();
-    // When the 'Submit' button gets pressed from the username screen,
-    // We should send a request to the server to create a new room with
-    // the uuid we generate here.
-    console.log('Form input value is ', value);
-  };
-
   return (
     <Container>
-      <InputForm handleSubmit={handleSubmit} />
+      <Router>
+        <SocketContextProvider>
+          <Switch>
+            <Route exact path="/">
+              <HomePage />
+            </Route>
+
+            <Route path="/game/:gameId">
+              <WelcomePage />
+            </Route>
+          </Switch>
+        </SocketContextProvider>
+      </Router>
     </Container>
   );
 }

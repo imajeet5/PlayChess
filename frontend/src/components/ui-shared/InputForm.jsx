@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Form, Button } from 'semantic-ui-react';
+import { Form, Button } from 'semantic-ui-react';
 
 export default function InputForm({ handleSubmit }) {
   const [state, setState] = useState('');
