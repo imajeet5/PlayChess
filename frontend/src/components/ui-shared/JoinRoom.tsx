@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { SocketContext } from '../../contexts/SocketContext';
-import InputForm from '../ui-shared/InputForm';
-import uuid from 'uuid/dist/v4';
+import InputForm from './InputForm';
 
-export default function HomePage() {
+export default function JoinRoom({ gameId, isCreator }) {
   const { socket, socketId } = useContext(SocketContext);
   const isFormSubmitted = useRef(false);
-  const history = useHistory();
   const handleSubmit = (e, value) => {
     e.preventDefault();
     console.log('Form input value is ', value);
@@ -20,18 +17,15 @@ export default function HomePage() {
 
   useEffect(() => {
     if (socketId && isFormSubmitted.current) {
-      const newGameRoomId = uuid();
-      socket.emit('createNewGame', newGameRoomId);
+      socket.emit('joinGame', gameId);
 
-      history.push(`/game/${newGameRoomId}`);
       isFormSubmitted.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socketId]);
+  const success = <h1>Connecting...</h1>;
 
   return (
-    <div>
-      <InputForm handleSubmit={handleSubmit} />
-    </div>
+    <div>{socketId ? success : <InputForm handleSubmit={handleSubmit} />}</div>
   );
 }

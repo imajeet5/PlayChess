@@ -23,7 +23,6 @@ export default function InputForm({ handleSubmit }) {
           <input
             value={state}
             onChange={(e) => setState(e.target.value)}
-            focus="true"
             placeholder="Name..."
           />
         </Form.Field>
