@@ -1,27 +1,28 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SocketContext } from '../../contexts/SocketContext';
 import InputForm from '../ui-shared/InputForm';
 
 export default function HomePage() {
   const { socket, socketId } = useContext(SocketContext);
+  const isFormSubmitted = useRef(false);
   const history = useHistory();
   const handleSubmit = (e, value) => {
     e.preventDefault();
-    // When the 'Submit' button gets pressed from the username screen,
-    // We should send a request to the server to create a new room with
-    // the uuid we generate here.
     console.log('Form input value is ', value);
+    if (socket.connected) {
+      socket.close();
+    }
     socket.open();
-    console.log(socketId);
-    socket.emit('CreateGame', value);
+    isFormSubmitted.current = true;
 
-    // setSocketId(socket.id);
+    socket.emit('CreateGame', value);
   };
 
   useEffect(() => {
-    if (socketId) {
+    if (socketId && isFormSubmitted.current) {
       history.push(`/game/${socketId}`);
+      isFormSubmitted.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socketId]);
