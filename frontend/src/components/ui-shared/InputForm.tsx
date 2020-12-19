@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 
-export default function InputForm({ handleSubmit,username }) {
+export default function InputForm({ handleSubmit, username }) {
   const [state, setState] = useState(username);
+  const inputRef = useRef<any>();
 
   //   const { userName } = useContext(ColorContext);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  });
 
   return (
     <div>
@@ -21,6 +26,7 @@ export default function InputForm({ handleSubmit,username }) {
             Enter Name
           </label>
           <input
+            ref={inputRef}
             value={state}
             onChange={(e) => setState(e.target.value)}
             placeholder="Name..."

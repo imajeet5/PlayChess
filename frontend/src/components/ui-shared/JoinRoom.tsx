@@ -3,7 +3,7 @@ import { SocketContext } from '../../contexts/SocketContext';
 import InputForm from './InputForm';
 
 // this component is used for the user who want to connect to the existing game
-export default function JoinRoom({ gameId, isCreator }) {
+export default function JoinRoom({ gameId, isCreator, setOpponentUserName }) {
   const { socket, socketId, username, setUsername } = useContext(SocketContext);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
@@ -17,6 +17,13 @@ export default function JoinRoom({ gameId, isCreator }) {
     setUsername(value);
     setIsFormSubmitted(true);
   };
+
+  // when we receive the opponent game data we will start the game
+  useEffect(() => {
+    socket.on('creatorGameData', (oppName) => {
+      setOpponentUserName(oppName);
+    });
+  }, []);
 
   useEffect(() => {
     if (socketId && isFormSubmitted) {

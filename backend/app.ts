@@ -26,13 +26,7 @@ io.on('connection', (socket: Socket) => {
   console.log(`Socket id: ${chalk.bold.blue(socket.id)} is connected`);
   initializeGame(io, socket);
 });
-setInterval(() => {
-  io.emit('global', 'This is message is broadcast globally');
-}, 2000);
 
-// app.listen(PORT, () => {
-//   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-// });
 server.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 });
