@@ -25,10 +25,10 @@ export default function Lobby({
   const [play] = useSound(chessMove);
   return (
     <div>
-      <h1>Opponent has joined the game</h1>
-      <p>
+      <h1>
+        {' '}
         {myUserName} vs {opponentUserName}
-      </p>
+      </h1>
 
       <ChessGame
         playAudio={play}
