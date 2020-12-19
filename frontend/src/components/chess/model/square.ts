@@ -41,8 +41,8 @@ class Square {
     this.pieceOnThisSquare = null;
   }
 
-  getPiece() {
-    return this.pieceOnThisSquare;
+  getPiece() : ChessPiece {
+    return this.pieceOnThisSquare as ChessPiece;
   }
 
   getPieceIdOnThisSquare() {
