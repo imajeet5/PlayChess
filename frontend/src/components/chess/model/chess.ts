@@ -10,6 +10,15 @@ import Square from './square'
 
 
 class Game {
+    thisPlayersColorIsWhite: boolean;
+    chessBoard: Square[][];
+    chess: Chess;
+    toCoord: any;
+    toAlphabet: Object;
+    toCoord2: Object;
+    toAlphabet2: Object;
+    nQueens: number
+    
     constructor(thisPlayersColorIsWhite) {
         this.thisPlayersColorIsWhite = thisPlayersColorIsWhite // once initialized, this value should never change.
         // console.log("this player's color is white: " + this.thisPlayersColorIsWhite) 
@@ -274,7 +283,7 @@ class Game {
 
     makeStartingBoard() {
         const backRank = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
-        var startingChessBoard = []
+        var startingChessBoard: Array<Array<Square>> = []
         for (var i = 0; i < 8; i++) {
             startingChessBoard.push([])
             for (var j = 0; j < 8; j++) {
