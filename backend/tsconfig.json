@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
-      "target": "es6",
+      "target": "es5",
       "module": "commonjs",
+      "moduleResolution": "Node",
       "rootDir": "./",
       "outDir": "./build",
       "esModuleInterop": true,
       "strict": true,
-      "noImplicitAny": false
+      "noImplicitAny": false,
+      "sourceMap": true
       
     },
     "include": ["**/*"],

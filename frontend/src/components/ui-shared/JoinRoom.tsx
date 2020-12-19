@@ -1,31 +1,44 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../../contexts/SocketContext';
 import InputForm from './InputForm';
 
+// this component is used for the user who want to connect to the existing game
 export default function JoinRoom({ gameId, isCreator }) {
-  const { socket, socketId } = useContext(SocketContext);
-  const isFormSubmitted = useRef(false);
+  const { socket, socketId, username, setUsername } = useContext(SocketContext);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
   const handleSubmit = (e, value) => {
     e.preventDefault();
-    console.log('Form input value is ', value);
+
     if (socket.connected) {
       socket.close();
     }
     socket.open();
-    isFormSubmitted.current = true;
+    setUsername(value);
+    setIsFormSubmitted(true);
   };
 
   useEffect(() => {
-    if (socketId && isFormSubmitted.current) {
-      socket.emit('joinGame', gameId);
+    if (socketId && isFormSubmitted) {
+      const userGameData = {
+        gameId,
+        username,
+      };
+      socket.emit('joinGame', userGameData);
 
-      isFormSubmitted.current = false;
+      setIsFormSubmitted(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socketId]);
-  const success = <h1>Connecting...</h1>;
+  }, [socketId, isFormSubmitted]);
+  const success = <h1>Hi {username}, Please wait while we connect...</h1>;
 
   return (
-    <div>{socketId ? success : <InputForm handleSubmit={handleSubmit} />}</div>
+    <div>
+      {socketId ? (
+        success
+      ) : (
+        <InputForm username={username} handleSubmit={handleSubmit} />
+      )}
+    </div>
   );
 }

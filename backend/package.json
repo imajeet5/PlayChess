@@ -12,6 +12,7 @@
   "keywords": [
     "chess"
   ],
+
   "author": "ajeet",
   "license": "ISC",
   "dependencies": {

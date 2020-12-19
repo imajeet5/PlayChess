@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 
-export default function InputForm({ handleSubmit }) {
-  const [state, setState] = useState('');
+export default function InputForm({ handleSubmit,username }) {
+  const [state, setState] = useState(username);
 
   //   const { userName } = useContext(ColorContext);
 
