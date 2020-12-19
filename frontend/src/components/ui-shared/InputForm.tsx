@@ -5,8 +5,6 @@ export default function InputForm({ handleSubmit, username }) {
   const [state, setState] = useState(username);
   const inputRef = useRef<any>();
 
-  //   const { userName } = useContext(ColorContext);
-
   useEffect(() => {
     inputRef.current.focus();
   });
@@ -43,17 +41,3 @@ export default function InputForm({ handleSubmit, username }) {
     </div>
   );
 }
-
-/**
- *  <Input
-          style={{
-            marginLeft: String(window.innerWidth / 2 - 120) + 'px',
-            width: '240px',
-            marginTop: '62px',
-          }}
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          focus
-          placeholder="Search..."
-        />
- */

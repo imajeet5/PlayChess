@@ -23,6 +23,9 @@ export default function JoinRoom({ gameId, isCreator, setOpponentUserName }) {
     socket.on('creatorGameData', (oppName) => {
       setOpponentUserName(oppName);
     });
+    return () => {
+      socket.off('creatorGameData');
+    };
   }, []);
 
   useEffect(() => {

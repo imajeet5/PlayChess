@@ -3,25 +3,15 @@ import { useParams } from 'react-router-dom';
 import { SocketContext } from '../../contexts/SocketContext';
 import JoinRoom from '../ui-shared/JoinRoom';
 import UserWaiting from '../ui-shared/UserWaiting';
-import Lobby from '../ui/Lobby';
+import Lobby from '../ui-shared/Lobby';
 
 // Either it a new user waiting to join the existing game or new user (creator) waiting for opponent
 export default function WelcomePage() {
   const { socket, socketId, username } = useContext(SocketContext);
   const { gameId } = useParams<{ gameId: string }>();
   // if socketId exist then user is the creator of the game
-  const [isCreator, setIsCreator] = useState(socketId ? true : false);
+  const [isCreator] = useState(socketId ? true : false);
   const [opponentUserName, setOpponentUserName] = useState(null);
-
-  useEffect(() => {
-    socket.on('startGame', (data) => {
-      console.log('Opponent has joined the game', data);
-      console.log('We can start the game now');
-    });
-    socket.on('error', (data) => {
-      console.error('Something went wrong', data);
-    });
-  }, []);
 
   const userWaiting = (
     <React.Fragment>
@@ -53,7 +43,8 @@ export default function WelcomePage() {
           myUserName={username}
           opponentUserName={opponentUserName}
           isCreator={isCreator}
-          socket={socket}
+          socket={socket} 
+          gameId={gameId}
         />
       ) : (
         waitingJSX
