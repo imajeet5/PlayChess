@@ -6,10 +6,27 @@ import Board from '../assets/chessBoard.png';
 
 import Piece from './piece';
 import piecemap from './piecemap';
+import { PlayFunction } from 'use-sound/dist/types';
+import { Socket } from 'socket.io-client';
 
-class ChessGame extends React.Component {
+interface PropsType {
+  isCreator: boolean;
+  playAudio: PlayFunction;
+  gameId: string;
+  socket: typeof Socket;
+}
+
+interface StateType {
+  gameState: Game;
+  draggedPieceTargetId: string; // empty string means no piece is being dragged
+  playerTurnToMoveIsWhite: boolean;
+  whiteKingInCheck: boolean;
+  blackKingInCheck: boolean;
+}
+
+class ChessGame extends React.Component<PropsType, StateType> {
   state = {
-    gameState: new Game(this.props.color),
+    gameState: new Game(this.props.isCreator),
     draggedPieceTargetId: '', // empty string means no piece is being dragged
     playerTurnToMoveIsWhite: true,
     whiteKingInCheck: false,
@@ -17,13 +34,13 @@ class ChessGame extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props.myUserName);
-    console.log(this.props.opponentUserName);
+    // console.log(this.props.myUserName);
+    // console.log(this.props.opponentUserName);
     // register event listeners
     this.props.socket.on('opponent move', (move) => {
       // move == [pieceId, finalPosition]
       // console.log("opponenet's move: " + move.selectedId + ", " + move.finalPosition)
-      if (move.playerColorThatJustMovedIsWhite !== this.props.color) {
+      if (move.playerColorThatJustMovedIsWhite !== this.props.isCreator) {
         this.movePiece(
           move.selectedId,
           move.finalPosition,
@@ -101,7 +118,7 @@ class ChessGame extends React.Component {
     this.setState({
       draggedPieceTargetId: '',
       gameState: currentGame,
-      playerTurnToMoveIsWhite: !this.props.color,
+      playerTurnToMoveIsWhite: !this.props.isCreator,
       whiteKingInCheck: whiteKingInCheck,
       blackKingInCheck: blackKingInCheck,
     });
@@ -130,9 +147,9 @@ class ChessGame extends React.Component {
      * Should update the UI to what the board looked like before.
      */
     const oldGS = this.state.gameState;
-    const oldBoard = oldGS.getBoard();
+    const oldBoard: Array<Array<Square>> = oldGS.getBoard();
     const tmpGS = new Game(true);
-    const tmpBoard = [];
+    const tmpBoard: Array<Array<Square>> = [];
 
     for (var i = 0; i < 8; i++) {
       tmpBoard.push([]);
@@ -201,7 +218,7 @@ class ChessGame extends React.Component {
         >
           <Stage width={720} height={720}>
             <Layer>
-              {this.state.gameState.getBoard().map((row) => {
+              {this.state.gameState.getBoard().map((row: Square[]) => {
                 return (
                   <React.Fragment>
                     {row.map((square) => {
@@ -218,7 +235,7 @@ class ChessGame extends React.Component {
                             onDragStart={this.startDragging}
                             onDragEnd={this.endDragging}
                             id={square.getPieceIdOnThisSquare()}
-                            thisPlayersColorIsWhite={this.props.color}
+                            thisPlayersColorIsWhite={this.props.isCreator}
                             playerTurnToMoveIsWhite={
                               this.state.playerTurnToMoveIsWhite
                             }

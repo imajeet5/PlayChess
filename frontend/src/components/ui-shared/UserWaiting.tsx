@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { TextareaHTMLAttributes, useEffect, useRef } from 'react';
+import { Divider, Message } from 'semantic-ui-react';
 
 export default function UserWaiting({
   username,
@@ -6,6 +7,13 @@ export default function UserWaiting({
   setOpponentUserName,
   gameId,
 }) {
+  const domainName = 'http://localhost:3001';
+  const inputRef = useRef<any>();
+  const copyText = () => {
+    inputRef.current.select();
+    document.execCommand('copy');
+  };
+
   useEffect(() => {
     socket.on('oppGameData', (oppName) => {
       console.log('Opponent has joined the game', oppName);
@@ -29,9 +37,63 @@ export default function UserWaiting({
     };
   }, []);
   return (
-    <div>
+    <div
+      style={{
+        textAlign: 'center',
+        marginTop: '30%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <h1>Welcome {username}</h1>
-      <h3>Your Socket id is {socket.id}</h3>
+      <div className="ui action input">
+        <input
+          ref={inputRef}
+          readOnly={true}
+          type="text"
+          value={domainName + '/game/' + gameId}
+          style={{ width: '500px' }}
+        />
+        <button
+          className="ui teal icon right labeled button"
+          onClick={copyText}
+        >
+          <i aria-hidden="true" className="copy icon"></i>Copy
+        </button>
+      </div>
+      <Divider horizontal></Divider>
+      <div
+        className="ui large message"
+        style={{ background: 'none', width: '400px' }}
+      >
+        Share the above link with your friend to play
+      </div>
     </div>
   );
 }
+
+/**
+ *   <div className="ui action input">
+        <input type="text" value="http://ww.short.url/c0opq" />
+        <button className="ui teal icon right labeled button">
+          <i aria-hidden="true" className="copy icon"></i>Copy
+        </button>
+      </div>
+ */
+
+/**
+  * <textarea
+        readOnly={true}
+        onFocus={(event) => {
+          console.log('sd');
+          event.target.select();
+        }}
+        ref={textAreaRef}
+        value={domainName + '/game/' + gameId}
+      ></textarea>{' '}
+      
+            <button className="btn" style={{ marginTop: -21 }} onClick={copyText}>
+        Copy
+      </button>
+  */

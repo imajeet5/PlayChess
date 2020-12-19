@@ -2,6 +2,15 @@ import React, { useEffect } from 'react';
 import ChessGame from '../chess/ui/chessgame';
 import chessMove from '../chess/assets/moveSoundEffect.mp3';
 import useSound from 'use-sound';
+import { Socket } from 'socket.io-client';
+
+interface PropsType {
+  myUserName: string;
+  opponentUserName: string | null;
+  isCreator: boolean;
+  socket: typeof Socket;
+  gameId: string;
+}
 
 export default function Lobby({
   myUserName,
@@ -9,7 +18,7 @@ export default function Lobby({
   isCreator,
   socket,
   gameId,
-}) {
+}: PropsType) {
   // const play = () => {
   //   console.log('Play audio ');
   // };
@@ -24,7 +33,7 @@ export default function Lobby({
       <ChessGame
         playAudio={play}
         gameId={gameId}
-        color={isCreator}
+        isCreator={isCreator}
         socket={socket}
       />
     </div>
