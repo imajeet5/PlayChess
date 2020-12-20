@@ -199,6 +199,25 @@ class ChessGame extends React.Component<PropsType, StateType> {
     return hashmap[shortestDistance];
   };
 
+  playerTurnUi = () => {
+    const { isCreator } = this.props;
+    const { playerTurnToMoveIsWhite } = this.state;
+    // if player is game creator
+    if (isCreator && playerTurnToMoveIsWhite) {
+      return 'Your Turn';
+    }
+    if (isCreator && !playerTurnToMoveIsWhite) {
+      return 'Opponent Turn';
+    }
+    // if the player is not game creator
+    if (!isCreator && playerTurnToMoveIsWhite) {
+      return 'Opponent Turn';
+    }
+    if (!isCreator && !playerTurnToMoveIsWhite) {
+      return 'Your Turn';
+    }
+  };
+
   render() {
     // console.log(this.state.gameState.getBoard())
     //  console.log("it's white's move this time: " + this.state.playerTurnToMoveIsWhite)
@@ -209,48 +228,51 @@ class ChessGame extends React.Component<PropsType, StateType> {
 
     return (
       <React.Fragment>
-        <div
-          style={{
-            backgroundImage: `url(${Board})`,
-            width: '720px',
-            height: '720px',
-          }}
-        >
-          <Stage width={720} height={720}>
-            <Layer>
-              {this.state.gameState.getBoard().map((row: Square[]) => {
-                return (
-                  <React.Fragment>
-                    {row.map((square) => {
-                      if (square.isOccupied()) {
-                        return (
-                          <Piece
-                            x={square.getCanvasCoord()[0]}
-                            y={square.getCanvasCoord()[1]}
-                            imgurls={piecemap[square.getPiece().name]}
-                            isWhite={square.getPiece().color === 'white'}
-                            draggedPieceTargetId={
-                              this.state.draggedPieceTargetId
-                            }
-                            onDragStart={this.startDragging}
-                            onDragEnd={this.endDragging}
-                            id={square.getPieceIdOnThisSquare()}
-                            thisPlayersColorIsWhite={this.props.isCreator}
-                            playerTurnToMoveIsWhite={
-                              this.state.playerTurnToMoveIsWhite
-                            }
-                            whiteKingInCheck={this.state.whiteKingInCheck}
-                            blackKingInCheck={this.state.blackKingInCheck}
-                          />
-                        );
-                      }
-                      return null;
-                    })}
-                  </React.Fragment>
-                );
-              })}
-            </Layer>
-          </Stage>
+        <div>
+          <p>{this.playerTurnUi()}</p>
+          <div
+            style={{
+              backgroundImage: `url(${Board})`,
+              width: '720px',
+              height: '720px',
+            }}
+          >
+            <Stage width={720} height={720}>
+              <Layer>
+                {this.state.gameState.getBoard().map((row: Square[]) => {
+                  return (
+                    <React.Fragment>
+                      {row.map((square) => {
+                        if (square.isOccupied()) {
+                          return (
+                            <Piece
+                              x={square.getCanvasCoord()[0]}
+                              y={square.getCanvasCoord()[1]}
+                              imgurls={piecemap[square.getPiece().name]}
+                              isWhite={square.getPiece().color === 'white'}
+                              draggedPieceTargetId={
+                                this.state.draggedPieceTargetId
+                              }
+                              onDragStart={this.startDragging}
+                              onDragEnd={this.endDragging}
+                              id={square.getPieceIdOnThisSquare()}
+                              thisPlayersColorIsWhite={this.props.isCreator}
+                              playerTurnToMoveIsWhite={
+                                this.state.playerTurnToMoveIsWhite
+                              }
+                              whiteKingInCheck={this.state.whiteKingInCheck}
+                              blackKingInCheck={this.state.blackKingInCheck}
+                            />
+                          );
+                        }
+                        return null;
+                      })}
+                    </React.Fragment>
+                  );
+                })}
+              </Layer>
+            </Stage>
+          </div>
         </div>
       </React.Fragment>
     );

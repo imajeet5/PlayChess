@@ -45,9 +45,11 @@ export default function Lobby({
   return (
     <div>
       {isOppConnected ? (
-        <h1>
+        <h1 className="ui border grey header">
           {' '}
-          {myUserName} vs {opponentUserName}
+          {myUserName}{' '}
+          <span style={{ fontSize: '20px', margin: '0 10px' }}>vs</span>{' '}
+          {opponentUserName}
         </h1>
       ) : (
         <div>
