@@ -1,9 +1,13 @@
 import chalk from 'chalk';
 import { Server, Socket } from 'socket.io';
+
+const ClientToRoom = new Map<string, string>();
+
 export const initializeGame = (io: Server, client: Socket) => {
   client.on('createNewGame', (gameId) => {
     console.log('Creating game id ', gameId);
     client.join(gameId);
+    ClientToRoom.set(client.id, gameId);
     client.emit('gameCreated', { gameId: gameId, socketId: client.id });
   });
 
@@ -19,6 +23,7 @@ export const initializeGame = (io: Server, client: Socket) => {
     }
 
     client.join(oppGameData.gameId);
+    ClientToRoom.set(client.id, oppGameData.gameId);
 
     if (room.size === 2) {
       io.sockets
@@ -46,5 +51,9 @@ export const initializeGame = (io: Server, client: Socket) => {
 
   client.on('disconnect', () => {
     console.log(`Socket id: ${chalk.bold.red(client.id)} is disconnected`);
+    const gameId = ClientToRoom.get(client.id);
+    if (gameId) {
+      io.to(gameId).emit('opponentDisconnected', 'opponentDisconnected');
+    }
   });
 };
