@@ -204,17 +204,17 @@ class ChessGame extends React.Component<PropsType, StateType> {
     const { playerTurnToMoveIsWhite } = this.state;
     // if player is game creator
     if (isCreator && playerTurnToMoveIsWhite) {
-      return 'Your Turn';
+      return <div style={{width:'103px'}} className="ui green message">Your Turn</div>
     }
     if (isCreator && !playerTurnToMoveIsWhite) {
-      return 'Opponent Turn';
+      return <div style={{width:'138px'}}className="ui orange message">Opponent Turn</div>;
     }
     // if the player is not game creator
     if (!isCreator && playerTurnToMoveIsWhite) {
-      return 'Opponent Turn';
+      return <div style={{width:'138px'}} className="ui orange message">Opponent Turn</div>;
     }
     if (!isCreator && !playerTurnToMoveIsWhite) {
-      return 'Your Turn';
+      return <div style={{width:'103px'}} className="ui green message">Your Turn</div>;
     }
   };
 
@@ -229,7 +229,7 @@ class ChessGame extends React.Component<PropsType, StateType> {
     return (
       <React.Fragment>
         <div>
-          <p>{this.playerTurnUi()}</p>
+          {this.playerTurnUi()}
           <div
             style={{
               backgroundImage: `url(${Board})`,

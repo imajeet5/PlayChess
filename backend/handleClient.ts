@@ -56,4 +56,11 @@ export const initializeGame = (io: Server, client: Socket) => {
       io.to(gameId).emit('opponentDisconnected', 'opponentDisconnected');
     }
   });
+  // this is just temporary for debugging purpose, will improve this more later
+  // client.on('connect', () => {
+  //   const gameId = ClientToRoom.get(client.id);
+  //   if (gameId) {
+  //     client.join(gameId);
+  //   }
+  // });
 };
